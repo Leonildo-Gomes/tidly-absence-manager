@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  # Serviço para a aplicação Absence Manager
+  postgres_absence:
+    image: postgres:13
+    container_name: absence_manager_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: absence_manager_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_absence_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_absence_data:

@@ -34,5 +34,5 @@ build/
 
 .agent/
 .gemini/
-MVP_SPECIFICATION.md
+#MVP_SPECIFICATION.md
 /db/

@@ -7,11 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record DepartmentRequest(
-        @NotBlank @Size(max = 100) String name,
+                @NotBlank @Size(max = 100) String name,
 
-        UUID parentDepartmentId,
+                @Size(max = 15) String code,
 
-        @NotNull UUID companyId,
+                @NotNull UUID companyId,
 
-        UUID managerId) {
+                UUID parentDepartmentId) {
 }
