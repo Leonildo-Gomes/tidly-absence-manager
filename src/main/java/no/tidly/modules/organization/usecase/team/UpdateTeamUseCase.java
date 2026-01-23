@@ -1,11 +1,11 @@
-package no.tidly.modules.organization.usecase;
+package no.tidly.modules.organization.usecase.team;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import no.tidly.core.exceptions.ResourceNotFoundException;
-import no.tidly.modules.organization.domain.DepartmentEntity;
+import no.tidly.core.shared.Utils;
 import no.tidly.modules.organization.domain.TeamEntity;
 import no.tidly.modules.organization.dto.TeamRequest;
 import no.tidly.modules.organization.repository.DepartmentRepository;
@@ -26,12 +26,10 @@ public class UpdateTeamUseCase {
         TeamEntity team = this.teamRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
-        DepartmentEntity department = this.departmentRepository.findById(request.departmentId())
+        this.departmentRepository.findById(request.departmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
 
-        team.setName(request.name());
-        team.setDepartment(department);
-
+        Utils.copyNonNullProperties(request, team);
         return this.teamRepository.save(team);
     }
 }

@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import no.tidly.modules.organization.domain.CompanyEntity;
 import no.tidly.modules.organization.dto.CompanyRequest;
 import no.tidly.modules.organization.dto.CompanyResponse;
-import no.tidly.modules.organization.usecase.CreateCompanyUseCase;
-import no.tidly.modules.organization.usecase.GetAllCompaniesUseCase;
-import no.tidly.modules.organization.usecase.GetCompanyByIdUseCase;
-import no.tidly.modules.organization.usecase.UpdateCompanyUseCase;
+import no.tidly.modules.organization.usecase.company.CreateCompanyUseCase;
+import no.tidly.modules.organization.usecase.company.GetAllCompaniesUseCase;
+import no.tidly.modules.organization.usecase.company.GetCompanyByIdUseCase;
+import no.tidly.modules.organization.usecase.company.UpdateCompanyUseCase;
 
 @RestController
 @RequestMapping("/companies")
+@Tag(name = "Company", description = "Company management")
 public class CompanyController {
 
     private final CreateCompanyUseCase createCompanyUseCase;

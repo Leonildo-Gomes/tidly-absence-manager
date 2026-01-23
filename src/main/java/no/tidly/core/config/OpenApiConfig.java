@@ -8,17 +8,17 @@ import io.swagger.v3.oas.models.info.Info;
 
 @Configuration
 public class OpenApiConfig {
-    String description = """
-            <h1>Tidly Absence Manager API</h1>
-            <p>API for managing absences in Norway</p>
-            """;
+        String description = """
+                        <h1>Tidly Absence Manager API</h1>
+                        <p>API for managing absences in Norway</p>
+                        """;
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Tidly Absence Manager API")
-                        .version("1.0")
-                        .description(description));
-    }
+        @Bean
+        public OpenAPI customOpenAPI() {
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("Tidly Absence Manager API")
+                                                .version("1.0")
+                                                .description(description));
+        }
 }

@@ -32,6 +32,12 @@ public class EmployeeEntity extends BaseEntity {
     @Column(name = "user_id", nullable = false, length = 100, unique = true)
     private String userId;
 
+    @Column(nullable = false, length = 150)
+    private String name;
+
+    @Column(nullable = false, length = 150, unique = true)
+    private String email;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private CompanyEntity company;

@@ -1,4 +1,4 @@
-package no.tidly.modules.organization.usecase;
+package no.tidly.modules.organization.usecase.company;
 
 import org.springframework.stereotype.Service;
 

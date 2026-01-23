@@ -17,10 +17,10 @@ import jakarta.validation.Valid;
 import no.tidly.modules.organization.domain.DepartmentEntity;
 import no.tidly.modules.organization.dto.DepartmentRequest;
 import no.tidly.modules.organization.dto.DepartmentResponse;
-import no.tidly.modules.organization.usecase.CreateDepartmentUseCase;
-import no.tidly.modules.organization.usecase.GetAllDepartmentsUseCase;
-import no.tidly.modules.organization.usecase.GetDepartmentByIdUseCase;
-import no.tidly.modules.organization.usecase.UpdateDepartmentUseCase;
+import no.tidly.modules.organization.usecase.department.CreateDepartmentUseCase;
+import no.tidly.modules.organization.usecase.department.GetAllDepartmentsUseCase;
+import no.tidly.modules.organization.usecase.department.GetDepartmentByIdUseCase;
+import no.tidly.modules.organization.usecase.department.UpdateDepartmentUseCase;
 
 @RestController
 @RequestMapping("/departments")

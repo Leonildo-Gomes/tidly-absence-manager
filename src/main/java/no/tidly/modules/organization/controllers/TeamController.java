@@ -17,10 +17,10 @@ import jakarta.validation.Valid;
 import no.tidly.modules.organization.domain.TeamEntity;
 import no.tidly.modules.organization.dto.TeamRequest;
 import no.tidly.modules.organization.dto.TeamResponse;
-import no.tidly.modules.organization.usecase.CreateTeamUseCase;
-import no.tidly.modules.organization.usecase.GetAllTeamsUseCase;
-import no.tidly.modules.organization.usecase.GetTeamByIdUseCase;
-import no.tidly.modules.organization.usecase.UpdateTeamUseCase;
+import no.tidly.modules.organization.usecase.team.CreateTeamUseCase;
+import no.tidly.modules.organization.usecase.team.GetAllTeamsUseCase;
+import no.tidly.modules.organization.usecase.team.GetTeamByIdUseCase;
+import no.tidly.modules.organization.usecase.team.UpdateTeamUseCase;
 
 @RestController
 @RequestMapping("/teams")
