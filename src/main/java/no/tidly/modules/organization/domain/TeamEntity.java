@@ -31,6 +31,9 @@ public class TeamEntity extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Column(length = 15, unique = true, nullable = false)
+    private String code;
+
     @Column(name = "is_active", nullable = false)
     @Builder.Default
     private Boolean isActive = true;

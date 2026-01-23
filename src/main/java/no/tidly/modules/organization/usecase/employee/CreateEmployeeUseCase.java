@@ -47,7 +47,7 @@ public class CreateEmployeeUseCase {
                 .gender(request.gender())
                 .startDate(request.startDate())
                 .endDate(request.endDate())
-                .isActive(request.isActive() != null ? request.isActive() : true)
+                .isActive(request.isActive())
                 .company(company)
                 .team(team)
                 .build();

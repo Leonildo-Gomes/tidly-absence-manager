@@ -27,6 +27,7 @@ public class CreateTeamUseCase {
         var team = TeamEntity.builder()
                 .name(request.name())
                 .department(department)
+                .code(request.code())
                 .build();
         return this.teamRepository.save(team);
     }

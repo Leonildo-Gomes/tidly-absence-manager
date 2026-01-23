@@ -31,7 +31,7 @@ public class DepartmentEntity extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(length = 15)
+    @Column(length = 15, unique = true, nullable = false)
     private String code;
 
     @ManyToOne(fetch = FetchType.LAZY)

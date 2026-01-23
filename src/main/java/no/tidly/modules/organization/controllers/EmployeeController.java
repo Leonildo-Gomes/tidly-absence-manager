@@ -18,9 +18,11 @@ import no.tidly.modules.organization.domain.EmployeeEntity;
 import no.tidly.modules.organization.dto.EmployeeRequest;
 import no.tidly.modules.organization.dto.EmployeeResponse;
 import no.tidly.modules.organization.usecase.employee.CreateEmployeeUseCase;
+import no.tidly.modules.organization.usecase.employee.DeleteEmployeeUseCase;
 import no.tidly.modules.organization.usecase.employee.GetAllEmployeesUseCase;
 import no.tidly.modules.organization.usecase.employee.GetEmployeeByIdUseCase;
 import no.tidly.modules.organization.usecase.employee.UpdateEmployeeUseCase;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @RestController
 @RequestMapping("/employees")
@@ -30,15 +32,18 @@ public class EmployeeController {
     private final GetEmployeeByIdUseCase getEmployeeByIdUseCase;
     private final GetAllEmployeesUseCase getAllEmployeesUseCase;
     private final UpdateEmployeeUseCase updateEmployeeUseCase;
+    private final DeleteEmployeeUseCase deleteEmployeeUseCase;
 
     public EmployeeController(CreateEmployeeUseCase createEmployeeUseCase,
             GetEmployeeByIdUseCase getEmployeeByIdUseCase,
             GetAllEmployeesUseCase getAllEmployeesUseCase,
-            UpdateEmployeeUseCase updateEmployeeUseCase) {
+            UpdateEmployeeUseCase updateEmployeeUseCase,
+            DeleteEmployeeUseCase deleteEmployeeUseCase) {
         this.createEmployeeUseCase = createEmployeeUseCase;
         this.getEmployeeByIdUseCase = getEmployeeByIdUseCase;
         this.getAllEmployeesUseCase = getAllEmployeesUseCase;
         this.updateEmployeeUseCase = updateEmployeeUseCase;
+        this.deleteEmployeeUseCase = deleteEmployeeUseCase;
     }
 
     @PostMapping
@@ -65,6 +70,12 @@ public class EmployeeController {
             @Valid @RequestBody EmployeeRequest request) {
         var employee = this.updateEmployeeUseCase.execute(id, request);
         return ResponseEntity.ok(this.mapToResponse(employee));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        this.deleteEmployeeUseCase.execute(id);
+        return ResponseEntity.noContent().build();
     }
 
     private EmployeeResponse mapToResponse(EmployeeEntity employee) {

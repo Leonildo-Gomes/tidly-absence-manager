@@ -31,6 +31,12 @@ public class UpdateEmployeeUseCase {
         var employee = this.employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
+        this.teamRepository.findById(request.teamId())
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+
+        this.companyRepository.findById(request.companyId())
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
         Utils.copyNonNullProperties(request, employee);
         return this.employeeRepository.save(employee);
     }
