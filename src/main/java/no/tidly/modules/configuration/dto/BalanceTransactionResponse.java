@@ -1,0 +1,20 @@
+package no.tidly.modules.configuration.dto;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import no.tidly.modules.configuration.domain.enums.TransactionType;
+
+public record BalanceTransactionResponse(
+                UUID id,
+                UUID employeeId,
+                UUID absenceTypeId,
+                Integer year,
+                BigDecimal amount,
+                TransactionType transactionType,
+                String description,
+                UUID createdBy,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt) {
+}
