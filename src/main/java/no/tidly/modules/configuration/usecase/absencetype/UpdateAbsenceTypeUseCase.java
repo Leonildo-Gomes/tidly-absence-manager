@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.core.exceptions.ResourceNotFoundException;
+import no.tidly.core.shared.Utils;
 import no.tidly.modules.configuration.domain.AbsenceTypeEntity;
 import no.tidly.modules.configuration.dto.AbsenceTypeRequest;
 import no.tidly.modules.configuration.dto.AbsenceTypeResponse;
@@ -23,13 +24,7 @@ public class UpdateAbsenceTypeUseCase {
         AbsenceTypeEntity entity = absenceTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AbsenceType not found with id: " + id));
 
-        entity.setName(request.name());
-        entity.setDescription(request.description());
-        entity.setIsPaid(request.isPaid());
-        entity.setRequiresAttachment(request.requiresAttachment());
-        entity.setCode(request.code());
-        entity.setIsActive(request.isActive());
-
+        Utils.copyNonNullProperties(request, entity);
         AbsenceTypeEntity updatedEntity = absenceTypeRepository.save(entity);
         return mapToResponse(updatedEntity);
     }

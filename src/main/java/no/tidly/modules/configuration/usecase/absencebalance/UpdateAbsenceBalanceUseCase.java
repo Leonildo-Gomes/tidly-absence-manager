@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.core.exceptions.ResourceNotFoundException;
+import no.tidly.core.shared.Utils;
 import no.tidly.modules.configuration.domain.AbsenceBalanceEntity;
 import no.tidly.modules.configuration.dto.AbsenceBalanceRequest;
 import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
@@ -23,16 +24,7 @@ public class UpdateAbsenceBalanceUseCase {
         AbsenceBalanceEntity entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AbsenceBalance not found with id: " + id));
 
-        entity.setEmployeeId(request.employeeId());
-        entity.setAbsenceTypeId(request.absenceTypeId());
-        entity.setYear(request.year());
-        entity.setTotalEntitled(request.totalEntitled());
-        if (request.usedDays() != null) {
-            entity.setUsedDays(request.usedDays());
-        }
-        if (request.pendingDays() != null) {
-            entity.setPendingDays(request.pendingDays());
-        }
+        Utils.copyNonNullProperties(request, entity);
 
         AbsenceBalanceEntity updatedEntity = repository.save(entity);
         return mapToResponse(updatedEntity);

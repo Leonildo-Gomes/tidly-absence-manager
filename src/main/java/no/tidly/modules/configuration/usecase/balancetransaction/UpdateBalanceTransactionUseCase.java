@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.core.exceptions.ResourceNotFoundException;
+import no.tidly.core.shared.Utils;
 import no.tidly.modules.configuration.domain.BalanceTransactionEntity;
 import no.tidly.modules.configuration.dto.BalanceTransactionRequest;
 import no.tidly.modules.configuration.dto.BalanceTransactionResponse;
@@ -23,15 +24,7 @@ public class UpdateBalanceTransactionUseCase {
         BalanceTransactionEntity entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("BalanceTransaction not found with id: " + id));
 
-        entity.setEmployeeId(request.employeeId());
-        entity.setAbsenceTypeId(request.absenceTypeId());
-        entity.setYear(request.year());
-        entity.setAmount(request.amount());
-        entity.setTransactionType(request.transactionType());
-        entity.setDescription(request.description());
-        if (request.createdBy() != null) {
-            entity.setCreatedBy(request.createdBy());
-        }
+        Utils.copyNonNullProperties(request, entity);
 
         BalanceTransactionEntity updatedEntity = repository.save(entity);
         return mapToResponse(updatedEntity);

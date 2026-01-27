@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.core.exceptions.ResourceNotFoundException;
+import no.tidly.core.shared.Utils;
 import no.tidly.modules.configuration.domain.CompanyAbsenceSettingsEntity;
 import no.tidly.modules.configuration.dto.CompanyAbsenceSettingsRequest;
 import no.tidly.modules.configuration.dto.CompanyAbsenceSettingsResponse;
@@ -23,13 +24,7 @@ public class UpdateCompanyAbsenceSettingsUseCase {
         CompanyAbsenceSettingsEntity entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("CompanyAbsenceSettings not found with id: " + id));
 
-        entity.setCompanyId(request.companyId());
-        entity.setAbsenceTypeId(request.absenceTypeId());
-        entity.setDepartmentId(request.departmentId());
-        entity.setMaxDaysPerYear(request.maxDaysPerYear());
-        if (request.minNoticeDays() != null) {
-            entity.setMinNoticeDays(request.minNoticeDays());
-        }
+        Utils.copyNonNullProperties(request, entity);
 
         CompanyAbsenceSettingsEntity updatedEntity = repository.save(entity);
         return mapToResponse(updatedEntity);
