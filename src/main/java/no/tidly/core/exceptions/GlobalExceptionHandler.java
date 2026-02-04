@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralExceptions(Exception ex) {
+    @ExceptionHandler(OrgNumberFoundException.class)
+    public ResponseEntity<Object> handleGeneralExceptions(OrgNumberFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 "An unexpected error occurred: " + ex.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

@@ -2,6 +2,7 @@ package no.tidly.modules.organization.usecase.company;
 
 import org.springframework.stereotype.Service;
 
+import no.tidly.core.exceptions.OrgNumberFoundException;
 import no.tidly.modules.organization.domain.CompanyEntity;
 import no.tidly.modules.organization.dto.CompanyRequest;
 import no.tidly.modules.organization.repository.CompanyRepository;
@@ -16,6 +17,16 @@ public class CreateCompanyUseCase {
     }
 
     public CompanyEntity execute(CompanyRequest request) {
+        this.companyRepository.findByOrgNumber(request.organizationNumber())
+                .ifPresent(company -> {
+                    throw new OrgNumberFoundException(request.organizationNumber());
+                });
+        if (request.name() == null) {
+            throw new IllegalArgumentException("Company name cannot be null");
+        }
+        if (request.organizationNumber() == null) {
+            throw new IllegalArgumentException("Organization number cannot be null");
+        }
 
         var company = CompanyEntity.builder()
                 .name(request.name())

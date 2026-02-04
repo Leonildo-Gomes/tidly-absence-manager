@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import no.tidly.core.exceptions.ResourceNotFoundException;
 import no.tidly.modules.organization.domain.DepartmentEntity;
 import no.tidly.modules.organization.dto.DepartmentRequest;
+import no.tidly.modules.organization.dto.DepartmentResponse;
+import no.tidly.modules.organization.mapper.DepartmentMapper;
 import no.tidly.modules.organization.repository.CompanyRepository;
 import no.tidly.modules.organization.repository.DepartmentRepository;
 
@@ -13,14 +15,16 @@ public class CreateDepartmentUseCase {
 
     private final DepartmentRepository departmentRepository;
     private final CompanyRepository companyRepository;
+    private final DepartmentMapper departmentMapper;
 
     public CreateDepartmentUseCase(DepartmentRepository departmentRepository,
-            CompanyRepository companyRepository) {
+            CompanyRepository companyRepository, DepartmentMapper departmentMapper) {
         this.departmentRepository = departmentRepository;
         this.companyRepository = companyRepository;
+        this.departmentMapper = departmentMapper;
     }
 
-    public DepartmentEntity execute(DepartmentRequest request) {
+    public DepartmentResponse execute(DepartmentRequest request) {
         var company = this.companyRepository.findById(request.companyId())
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
@@ -36,7 +40,7 @@ public class CreateDepartmentUseCase {
                 .company(company)
                 .parentDepartment(parentDepartment)
                 .build();
-
-        return this.departmentRepository.save(department);
+        DepartmentEntity savedDepartment = this.departmentRepository.save(department);
+        return departmentMapper.toResponse(savedDepartment);
     }
 }

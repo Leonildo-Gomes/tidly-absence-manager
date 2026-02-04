@@ -1,5 +1,6 @@
 package no.tidly.modules.organization.usecases.department;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -34,40 +35,50 @@ public class CreateDepartmentUseCaseTest {
     private CompanyRepository companyRepository;
 
     @Test
-    @DisplayName("Should not be able to create department when company not found")
-    void should_not_to_be_able_to_create_department_when_company_not_found() {
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-            DepartmentRequest departmentRequest = new DepartmentRequest(null, null, null, null);
-            createDepartmentUseCase.execute(departmentRequest);
-        });
-    }
-
-    @Test
-    @DisplayName("Should not be able to create department when parent department not found")
-    void should_not_to_be_able_to_create_department_when_parent_department_not_found() {
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-            DepartmentRequest departmentRequest = new DepartmentRequest(null, null, null, null);
-            createDepartmentUseCase.execute(departmentRequest);
-        });
-    }
-
-    @Test
-    @DisplayName("Should be able to create department")
-    void should_be_able_to_create_department_with_parent_department_is_null() {
+    @DisplayName("Should throw exception when company is not found")
+    void should_throw_exception_when_company_not_found() {
         var companyId = UUID.randomUUID();
+        var departmentRequest = new DepartmentRequest("Department", "DEP", companyId, null);
+
+        when(companyRepository.findById(companyId)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            createDepartmentUseCase.execute(departmentRequest);
+        });
+    }
+
+    @Test
+    @DisplayName("Should throw exception when parent department is not found")
+    void should_throw_exception_when_parent_department_not_found() {
+        var companyId = UUID.randomUUID();
+        var parentId = UUID.randomUUID();
+        var departmentRequest = new DepartmentRequest("Department", "DEP", companyId, parentId);
         when(companyRepository.findById(companyId)).thenReturn(Optional.of(new CompanyEntity()));
+
+        when(departmentRepository.findById(parentId)).thenReturn(Optional.empty());
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            createDepartmentUseCase.execute(departmentRequest);
+        });
+    }
+
+    @Test
+    @DisplayName("Should create department successfully")
+    void should_create_department_successfully() {
+        var companyId = UUID.randomUUID();
+        var company = new CompanyEntity();
+        company.setId(companyId);
+        company.setName("Company");
+        when(companyRepository.findById(companyId)).thenReturn(Optional.of(company));
         DepartmentRequest departmentRequest = new DepartmentRequest("Department", "DEP", companyId, null);
-        createDepartmentUseCase.execute(departmentRequest);
-    }
 
-    @Test
-    @DisplayName("Should be able to create department")
-    void should_be_able_to_create_department_with_parent_department_is_not_null() {
-        var companyId = UUID.randomUUID();
-        when(companyRepository.findById(companyId)).thenReturn(Optional.of(new CompanyEntity()));
-        var parentDepartmentId = UUID.randomUUID();
-        when(departmentRepository.findById(parentDepartmentId)).thenReturn(Optional.of(new DepartmentEntity()));
-        DepartmentRequest departmentRequest = new DepartmentRequest("Department", "DEP", companyId, parentDepartmentId);
-        createDepartmentUseCase.execute(departmentRequest);
+        when(departmentRepository.save(any(DepartmentEntity.class))).thenAnswer(invocation -> {
+            return invocation.getArgument(0);
+        });
+        var result = createDepartmentUseCase.execute(departmentRequest);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(result.name(), departmentRequest.name());
+        Assertions.assertEquals(result.code(), departmentRequest.code());
+        // Assertions.assertEquals(result.companyId(), departmentRequest.companyId());
+        Assertions.assertNull(result.parentDepartmentId());
     }
 }

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import no.tidly.modules.organization.domain.DepartmentEntity;
 import no.tidly.modules.organization.dto.AssignManagerRequest;
 import no.tidly.modules.organization.dto.DepartmentManagerHistoryResponse;
 import no.tidly.modules.organization.dto.DepartmentRequest;
 import no.tidly.modules.organization.dto.DepartmentResponse;
+import no.tidly.modules.organization.mapper.DepartmentMapper;
 import no.tidly.modules.organization.usecase.department.AssignDepartmentManagerUseCase;
 import no.tidly.modules.organization.usecase.department.CreateDepartmentUseCase;
 import no.tidly.modules.organization.usecase.department.DeleteDepartmentUseCase;
@@ -40,6 +40,7 @@ public class DepartmentController {
     private final DeleteDepartmentUseCase deleteDepartmentUseCase;
     private final AssignDepartmentManagerUseCase assignDepartmentManagerUseCase;
     private final GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase;
+    private final DepartmentMapper departmentMapper;
 
     public DepartmentController(CreateDepartmentUseCase createDepartmentUseCase,
             GetDepartmentByIdUseCase getDepartmentByIdUseCase,
@@ -47,7 +48,8 @@ public class DepartmentController {
             UpdateDepartmentUseCase updateDepartmentUseCase,
             DeleteDepartmentUseCase deleteDepartmentUseCase,
             AssignDepartmentManagerUseCase assignDepartmentManagerUseCase,
-            GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase) {
+            GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase,
+            DepartmentMapper departmentMapper) {
         this.createDepartmentUseCase = createDepartmentUseCase;
         this.getDepartmentByIdUseCase = getDepartmentByIdUseCase;
         this.getAllDepartmentsUseCase = getAllDepartmentsUseCase;
@@ -55,24 +57,24 @@ public class DepartmentController {
         this.deleteDepartmentUseCase = deleteDepartmentUseCase;
         this.assignDepartmentManagerUseCase = assignDepartmentManagerUseCase;
         this.getDepartmentManagerHistoryUseCase = getDepartmentManagerHistoryUseCase;
+        this.departmentMapper = departmentMapper;
     }
 
     @PostMapping
     public ResponseEntity<DepartmentResponse> create(@Valid @RequestBody DepartmentRequest request) {
-        var department = this.createDepartmentUseCase.execute(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.mapToResponse(department));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.createDepartmentUseCase.execute(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponse> getById(@PathVariable UUID id) {
         var department = this.getDepartmentByIdUseCase.execute(id);
-        return ResponseEntity.ok(this.mapToResponse(department));
+        return ResponseEntity.ok(this.departmentMapper.toResponse(department));
     }
 
     @GetMapping
     public ResponseEntity<List<DepartmentResponse>> getAll() {
         var departments = this.getAllDepartmentsUseCase.execute();
-        var response = departments.stream().map(this::mapToResponse).toList();
+        var response = departments.stream().map(this.departmentMapper::toResponse).toList();
         return ResponseEntity.ok(response);
     }
 
@@ -80,7 +82,7 @@ public class DepartmentController {
     public ResponseEntity<DepartmentResponse> update(@PathVariable UUID id,
             @Valid @RequestBody DepartmentRequest request) {
         var department = this.updateDepartmentUseCase.execute(id, request);
-        return ResponseEntity.ok(this.mapToResponse(department));
+        return ResponseEntity.ok(this.departmentMapper.toResponse(department));
     }
 
     @DeleteMapping("/{id}")
@@ -109,16 +111,5 @@ public class DepartmentController {
                         h.getEndDate()))
                 .toList();
         return ResponseEntity.ok(response);
-    }
-
-    private DepartmentResponse mapToResponse(DepartmentEntity department) {
-        return new DepartmentResponse(
-                department.getId(),
-                department.getName(),
-                department.getCode(),
-                department.getCompany().getId(),
-                department.getParentDepartment() != null ? department.getParentDepartment().getId() : null,
-                department.getCreatedAt(),
-                department.getUpdatedAt());
     }
 }
