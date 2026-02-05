@@ -26,7 +26,7 @@ import no.tidly.modules.organization.usecase.company.GetCompanyByIdUseCase;
 import no.tidly.modules.organization.usecase.company.UpdateCompanyUseCase;
 
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/api/v1/companies")
 @Tag(name = "Company", description = "Company management")
 public class CompanyController {
 

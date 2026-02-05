@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +23,9 @@ import no.tidly.modules.organization.usecase.employee.DeleteEmployeeUseCase;
 import no.tidly.modules.organization.usecase.employee.GetAllEmployeesUseCase;
 import no.tidly.modules.organization.usecase.employee.GetEmployeeByIdUseCase;
 import no.tidly.modules.organization.usecase.employee.UpdateEmployeeUseCase;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
 
     private final CreateEmployeeUseCase createEmployeeUseCase;

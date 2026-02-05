@@ -30,7 +30,7 @@ import no.tidly.modules.organization.usecase.department.GetDepartmentManagerHist
 import no.tidly.modules.organization.usecase.department.UpdateDepartmentUseCase;
 
 @RestController
-@RequestMapping("/departments")
+@RequestMapping("/api/v1/departments")
 public class DepartmentController {
 
     private final CreateDepartmentUseCase createDepartmentUseCase;

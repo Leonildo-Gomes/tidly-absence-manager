@@ -30,7 +30,7 @@ import no.tidly.modules.organization.usecase.team.GetTeamLeaderHistoryUseCase;
 import no.tidly.modules.organization.usecase.team.UpdateTeamUseCase;
 
 @RestController
-@RequestMapping("/teams")
+@RequestMapping("/api/v1/teams")
 public class TeamController {
 
     private final CreateTeamUseCase createTeamUseCase;
