@@ -1,49 +1,50 @@
 package no.tidly.modules.configuration.usecase.absencebalance;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import no.tidly.core.exceptions.ResourceNotFoundException;
 import no.tidly.modules.configuration.domain.AbsenceBalanceEntity;
+import no.tidly.modules.configuration.domain.AbsenceTypeEntity;
 import no.tidly.modules.configuration.dto.AbsenceBalanceRequest;
 import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
 import no.tidly.modules.configuration.dto.repository.AbsenceBalanceRepository;
+import no.tidly.modules.configuration.mapper.AbsenceBalanceMapper;
+import no.tidly.modules.configuration.repository.AbsenceTypeRepository;
+import no.tidly.modules.organization.domain.EmployeeEntity;
+import no.tidly.modules.organization.repository.EmployeeRepository;
 
 @Service
 @RequiredArgsConstructor
 public class CreateAbsenceBalanceUseCase {
 
     private final AbsenceBalanceRepository repository;
+    private final EmployeeRepository employeeRepository;
+    private final AbsenceTypeRepository absenceTypeRepository;
+    private final AbsenceBalanceMapper mapper;
 
     @Transactional
     public AbsenceBalanceResponse execute(AbsenceBalanceRequest request) {
-        // Here we might check for duplicates using employee+year+type if we want strict
-        // business validation before DB constraint hit
+        EmployeeEntity employee = employeeRepository.findById(request.employeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        AbsenceTypeEntity absenceType = absenceTypeRepository.findById(request.absenceTypeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Absence type not found"));
 
         AbsenceBalanceEntity entity = AbsenceBalanceEntity.builder()
-                .employeeId(request.employeeId())
-                .absenceTypeId(request.absenceTypeId())
+                .employee(employee)
+                .absenceType(absenceType)
                 .year(request.year())
                 .totalEntitled(request.totalEntitled())
-                .usedDays(request.usedDays() != null ? request.usedDays() : java.math.BigDecimal.ZERO)
-                .pendingDays(request.pendingDays() != null ? request.pendingDays() : java.math.BigDecimal.ZERO)
+                .usedDays(request.usedDays() != null ? request.usedDays() : BigDecimal.ZERO)
+                .pendingDays(request.pendingDays() != null ? request.pendingDays() : BigDecimal.ZERO)
                 .build();
 
         AbsenceBalanceEntity savedEntity = repository.save(entity);
-        return mapToResponse(savedEntity);
+        return mapper.toResponse(savedEntity);
     }
 
-    private AbsenceBalanceResponse mapToResponse(AbsenceBalanceEntity entity) {
-        return new AbsenceBalanceResponse(
-                entity.getId(),
-                entity.getEmployeeId(),
-                entity.getAbsenceTypeId(),
-                entity.getYear(),
-                entity.getTotalEntitled(),
-                entity.getUsedDays(),
-                entity.getPendingDays(),
-                entity.getRemainingDays(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt());
-    }
 }

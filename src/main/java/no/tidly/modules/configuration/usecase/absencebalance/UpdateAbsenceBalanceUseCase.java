@@ -12,12 +12,14 @@ import no.tidly.modules.configuration.domain.AbsenceBalanceEntity;
 import no.tidly.modules.configuration.dto.AbsenceBalanceRequest;
 import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
 import no.tidly.modules.configuration.dto.repository.AbsenceBalanceRepository;
+import no.tidly.modules.configuration.mapper.AbsenceBalanceMapper;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateAbsenceBalanceUseCase {
 
     private final AbsenceBalanceRepository repository;
+    private final AbsenceBalanceMapper mapper;
 
     @Transactional
     public AbsenceBalanceResponse execute(UUID id, AbsenceBalanceRequest request) {
@@ -27,20 +29,6 @@ public class UpdateAbsenceBalanceUseCase {
         Utils.copyNonNullProperties(request, entity);
 
         AbsenceBalanceEntity updatedEntity = repository.save(entity);
-        return mapToResponse(updatedEntity);
-    }
-
-    private AbsenceBalanceResponse mapToResponse(AbsenceBalanceEntity entity) {
-        return new AbsenceBalanceResponse(
-                entity.getId(),
-                entity.getEmployeeId(),
-                entity.getAbsenceTypeId(),
-                entity.getYear(),
-                entity.getTotalEntitled(),
-                entity.getUsedDays(),
-                entity.getPendingDays(),
-                entity.getRemainingDays(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt());
+        return mapper.toResponse(updatedEntity);
     }
 }

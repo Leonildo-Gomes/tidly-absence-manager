@@ -2,29 +2,27 @@ package no.tidly.modules.configuration.mapper;
 
 import org.springframework.stereotype.Component;
 
-import no.tidly.modules.configuration.domain.BalanceTransactionEntity;
-import no.tidly.modules.configuration.dto.BalanceTransactionResponse;
+import no.tidly.modules.configuration.domain.AbsenceBalanceEntity;
+import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
 
 @Component
-public class BalanceTransactionMapper {
-
-    public BalanceTransactionResponse toResponse(BalanceTransactionEntity entity) {
+public class AbsenceBalanceMapper {
+    public AbsenceBalanceResponse toResponse(AbsenceBalanceEntity entity) {
         if (entity == null) {
             return null;
         }
-        return new BalanceTransactionResponse(
+        return new AbsenceBalanceResponse(
                 entity.getId(),
                 entity.getEmployee().getId(),
                 entity.getEmployee().getName(),
                 entity.getAbsenceType().getId(),
                 entity.getAbsenceType().getName(),
                 entity.getYear(),
-                entity.getAmount(),
-                entity.getTransactionType(),
-                entity.getDescription(),
-                entity.getCreatedBy(),
+                entity.getTotalEntitled(),
+                entity.getUsedDays(),
+                entity.getPendingDays(),
+                entity.getRemainingDays(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
     }
-
 }

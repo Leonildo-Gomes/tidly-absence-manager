@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import no.tidly.modules.organization.domain.EmployeeEntity;
 import no.tidly.modules.organization.dto.EmployeeRequest;
 import no.tidly.modules.organization.dto.EmployeeResponse;
 import no.tidly.modules.organization.usecase.employee.CreateEmployeeUseCase;
@@ -48,50 +47,28 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeResponse> create(@Valid @RequestBody EmployeeRequest request) {
-        var employee = this.createEmployeeUseCase.execute(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.mapToResponse(employee));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.createEmployeeUseCase.execute(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getById(@PathVariable UUID id) {
-        var employee = this.getEmployeeByIdUseCase.execute(id);
-        return ResponseEntity.ok(this.mapToResponse(employee));
+        return ResponseEntity.ok(this.getEmployeeByIdUseCase.execute(id));
     }
 
     @GetMapping
     public ResponseEntity<List<EmployeeResponse>> getAll() {
-        var employees = this.getAllEmployeesUseCase.execute();
-        var response = employees.stream().map(this::mapToResponse).toList();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.getAllEmployeesUseCase.execute());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> update(@PathVariable UUID id,
             @Valid @RequestBody EmployeeRequest request) {
-        var employee = this.updateEmployeeUseCase.execute(id, request);
-        return ResponseEntity.ok(this.mapToResponse(employee));
+        return ResponseEntity.ok(this.updateEmployeeUseCase.execute(id, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         this.deleteEmployeeUseCase.execute(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private EmployeeResponse mapToResponse(EmployeeEntity employee) {
-        return new EmployeeResponse(
-                employee.getId(),
-                employee.getUserId(),
-                employee.getName(),
-                employee.getEmail(),
-                employee.getPhone(),
-                employee.getGender(),
-                employee.getStartDate(),
-                employee.getEndDate(),
-                employee.getIsActive(),
-                employee.getCompany() != null ? employee.getCompany().getId() : null,
-                employee.getTeam() != null ? employee.getTeam().getId() : null,
-                employee.getCreatedAt(),
-                employee.getUpdatedAt());
     }
 }

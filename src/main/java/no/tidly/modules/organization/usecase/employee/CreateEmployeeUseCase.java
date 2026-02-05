@@ -7,6 +7,8 @@ import no.tidly.modules.organization.domain.CompanyEntity;
 import no.tidly.modules.organization.domain.EmployeeEntity;
 import no.tidly.modules.organization.domain.TeamEntity;
 import no.tidly.modules.organization.dto.EmployeeRequest;
+import no.tidly.modules.organization.dto.EmployeeResponse;
+import no.tidly.modules.organization.mapper.EmployeeMapper;
 import no.tidly.modules.organization.repository.CompanyRepository;
 import no.tidly.modules.organization.repository.EmployeeRepository;
 import no.tidly.modules.organization.repository.TeamRepository;
@@ -17,16 +19,18 @@ public class CreateEmployeeUseCase {
     private final EmployeeRepository employeeRepository;
     private final CompanyRepository companyRepository;
     private final TeamRepository teamRepository;
+    private final EmployeeMapper mapper;
 
     public CreateEmployeeUseCase(EmployeeRepository employeeRepository,
             CompanyRepository companyRepository,
-            TeamRepository teamRepository) {
+            TeamRepository teamRepository, EmployeeMapper mapper) {
         this.employeeRepository = employeeRepository;
         this.companyRepository = companyRepository;
         this.teamRepository = teamRepository;
+        this.mapper = mapper;
     }
 
-    public EmployeeEntity execute(EmployeeRequest request) {
+    public EmployeeResponse execute(EmployeeRequest request) {
         CompanyEntity company = null;
         if (request.companyId() != null) {
             company = this.companyRepository.findById(request.companyId())
@@ -51,7 +55,7 @@ public class CreateEmployeeUseCase {
                 .company(company)
                 .team(team)
                 .build();
-
-        return this.employeeRepository.save(employee);
+        var savedEntity = this.employeeRepository.save(employee);
+        return this.mapper.toResponse(savedEntity);
     }
 }

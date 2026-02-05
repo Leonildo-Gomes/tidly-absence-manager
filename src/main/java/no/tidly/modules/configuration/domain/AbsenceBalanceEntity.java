@@ -1,10 +1,12 @@
 package no.tidly.modules.configuration.domain;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import no.tidly.core.shared.BaseEntity;
+import no.tidly.modules.organization.domain.EmployeeEntity;
 
 @Entity
 @Table(name = "absence_balances")
@@ -24,11 +27,13 @@ import no.tidly.core.shared.BaseEntity;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AbsenceBalanceEntity extends BaseEntity {
 
-    @Column(name = "employee_id", nullable = false)
-    private UUID employeeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeEntity employee;
 
-    @Column(name = "absence_type_id", nullable = false)
-    private UUID absenceTypeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "absence_type_id", nullable = false)
+    private AbsenceTypeEntity absenceType;
 
     @Column(nullable = false)
     private Integer year;

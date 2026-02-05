@@ -11,6 +11,7 @@ import no.tidly.core.shared.Utils;
 import no.tidly.modules.configuration.domain.AbsenceTypeEntity;
 import no.tidly.modules.configuration.dto.AbsenceTypeRequest;
 import no.tidly.modules.configuration.dto.AbsenceTypeResponse;
+import no.tidly.modules.configuration.mapper.AbsenceTypeMapper;
 import no.tidly.modules.configuration.repository.AbsenceTypeRepository;
 
 @Service
@@ -18,6 +19,7 @@ import no.tidly.modules.configuration.repository.AbsenceTypeRepository;
 public class UpdateAbsenceTypeUseCase {
 
     private final AbsenceTypeRepository absenceTypeRepository;
+    private final AbsenceTypeMapper mapper;
 
     @Transactional
     public AbsenceTypeResponse execute(UUID id, AbsenceTypeRequest request) {
@@ -26,19 +28,6 @@ public class UpdateAbsenceTypeUseCase {
 
         Utils.copyNonNullProperties(request, entity);
         AbsenceTypeEntity updatedEntity = absenceTypeRepository.save(entity);
-        return mapToResponse(updatedEntity);
-    }
-
-    private AbsenceTypeResponse mapToResponse(AbsenceTypeEntity entity) {
-        return new AbsenceTypeResponse(
-                entity.getId(),
-                entity.getName(),
-                entity.getDescription(),
-                entity.getIsPaid(),
-                entity.getRequiresAttachment(),
-                entity.getCode(),
-                entity.getIsActive(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt());
+        return mapper.toResponse(updatedEntity);
     }
 }

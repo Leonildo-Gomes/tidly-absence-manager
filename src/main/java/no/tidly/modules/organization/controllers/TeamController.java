@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import no.tidly.modules.organization.domain.TeamEntity;
 import no.tidly.modules.organization.dto.AssignLeaderRequest;
 import no.tidly.modules.organization.dto.TeamLeaderHistoryResponse;
 import no.tidly.modules.organization.dto.TeamRequest;
@@ -59,28 +58,23 @@ public class TeamController {
 
     @PostMapping
     public ResponseEntity<TeamResponse> create(@Valid @RequestBody TeamRequest request) {
-        var team = this.createTeamUseCase.execute(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.mapToResponse(team));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.createTeamUseCase.execute(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TeamResponse> getById(@PathVariable UUID id) {
-        var team = this.getTeamByIdUseCase.execute(id);
-        return ResponseEntity.ok(this.mapToResponse(team));
+        return ResponseEntity.ok(this.getTeamByIdUseCase.execute(id));
     }
 
     @GetMapping
     public ResponseEntity<List<TeamResponse>> getAll() {
-        var teams = this.getAllTeamsUseCase.execute();
-        var response = teams.stream().map(this::mapToResponse).toList();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.getAllTeamsUseCase.execute());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TeamResponse> update(@PathVariable UUID id,
             @Valid @RequestBody TeamRequest request) {
-        var team = this.updateTeamUseCase.execute(id, request);
-        return ResponseEntity.ok(this.mapToResponse(team));
+        return ResponseEntity.ok(this.updateTeamUseCase.execute(id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -111,12 +105,4 @@ public class TeamController {
         return ResponseEntity.ok(response);
     }
 
-    private TeamResponse mapToResponse(TeamEntity team) {
-        return new TeamResponse(
-                team.getId(),
-                team.getName(),
-                team.getCode(),
-                team.getDepartment().getId(),
-                team.getDepartment().getName());
-    }
 }

@@ -40,7 +40,6 @@ public class DepartmentController {
     private final DeleteDepartmentUseCase deleteDepartmentUseCase;
     private final AssignDepartmentManagerUseCase assignDepartmentManagerUseCase;
     private final GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase;
-    private final DepartmentMapper departmentMapper;
 
     public DepartmentController(CreateDepartmentUseCase createDepartmentUseCase,
             GetDepartmentByIdUseCase getDepartmentByIdUseCase,
@@ -49,7 +48,7 @@ public class DepartmentController {
             DeleteDepartmentUseCase deleteDepartmentUseCase,
             AssignDepartmentManagerUseCase assignDepartmentManagerUseCase,
             GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase,
-            DepartmentMapper departmentMapper) {
+            DepartmentMapper mapper) {
         this.createDepartmentUseCase = createDepartmentUseCase;
         this.getDepartmentByIdUseCase = getDepartmentByIdUseCase;
         this.getAllDepartmentsUseCase = getAllDepartmentsUseCase;
@@ -57,7 +56,6 @@ public class DepartmentController {
         this.deleteDepartmentUseCase = deleteDepartmentUseCase;
         this.assignDepartmentManagerUseCase = assignDepartmentManagerUseCase;
         this.getDepartmentManagerHistoryUseCase = getDepartmentManagerHistoryUseCase;
-        this.departmentMapper = departmentMapper;
     }
 
     @PostMapping
@@ -67,22 +65,18 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponse> getById(@PathVariable UUID id) {
-        var department = this.getDepartmentByIdUseCase.execute(id);
-        return ResponseEntity.ok(this.departmentMapper.toResponse(department));
+        return ResponseEntity.ok(this.getDepartmentByIdUseCase.execute(id));
     }
 
     @GetMapping
     public ResponseEntity<List<DepartmentResponse>> getAll() {
-        var departments = this.getAllDepartmentsUseCase.execute();
-        var response = departments.stream().map(this.departmentMapper::toResponse).toList();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.getAllDepartmentsUseCase.execute());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponse> update(@PathVariable UUID id,
             @Valid @RequestBody DepartmentRequest request) {
-        var department = this.updateDepartmentUseCase.execute(id, request);
-        return ResponseEntity.ok(this.departmentMapper.toResponse(department));
+        return ResponseEntity.ok(this.updateDepartmentUseCase.execute(id, request));
     }
 
     @DeleteMapping("/{id}")

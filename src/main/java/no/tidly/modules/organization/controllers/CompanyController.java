@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import no.tidly.modules.organization.domain.CompanyEntity;
 import no.tidly.modules.organization.dto.CompanyRequest;
 import no.tidly.modules.organization.dto.CompanyResponse;
 import no.tidly.modules.organization.usecase.company.CreateCompanyUseCase;
@@ -50,42 +49,28 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity<CompanyResponse> create(@Valid @RequestBody CompanyRequest request) {
-        var company = this.createCompanyUseCase.execute(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.mapToResponse(company));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.createCompanyUseCase.execute(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CompanyResponse> getById(@PathVariable UUID id) {
-        var company = this.getCompanyByIdUseCase.execute(id);
-        return ResponseEntity.ok(this.mapToResponse(company));
+        return ResponseEntity.ok(this.getCompanyByIdUseCase.execute(id));
     }
 
     @GetMapping
     public ResponseEntity<List<CompanyResponse>> getAll() {
-        var companies = this.getAllCompaniesUseCase.execute();
-        var response = companies.stream().map(this::mapToResponse).toList();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.getAllCompaniesUseCase.execute());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CompanyResponse> update(@PathVariable UUID id,
             @Valid @RequestBody CompanyRequest request) {
-        var company = this.updateCompanyUseCase.execute(id, request);
-        return ResponseEntity.ok(this.mapToResponse(company));
+        return ResponseEntity.ok(this.updateCompanyUseCase.execute(id, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         this.deleteCompanyUseCase.execute(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private CompanyResponse mapToResponse(CompanyEntity company) {
-        return new CompanyResponse(
-                company.getId(),
-                company.getName(),
-                company.getOrgNumber(),
-                company.getCreatedAt(),
-                company.getUpdatedAt());
     }
 }

@@ -8,6 +8,8 @@ import no.tidly.core.exceptions.ResourceNotFoundException;
 import no.tidly.core.shared.Utils;
 import no.tidly.modules.organization.domain.TeamEntity;
 import no.tidly.modules.organization.dto.TeamRequest;
+import no.tidly.modules.organization.dto.TeamResponse;
+import no.tidly.modules.organization.mapper.TeamMapper;
 import no.tidly.modules.organization.repository.DepartmentRepository;
 import no.tidly.modules.organization.repository.TeamRepository;
 
@@ -16,13 +18,16 @@ public class UpdateTeamUseCase {
 
     private final TeamRepository teamRepository;
     private final DepartmentRepository departmentRepository;
+    private final TeamMapper mapper;
 
-    public UpdateTeamUseCase(TeamRepository teamRepository, DepartmentRepository departmentRepository) {
+    public UpdateTeamUseCase(TeamRepository teamRepository, DepartmentRepository departmentRepository,
+            TeamMapper mapper) {
         this.teamRepository = teamRepository;
         this.departmentRepository = departmentRepository;
+        this.mapper = mapper;
     }
 
-    public TeamEntity execute(UUID id, TeamRequest request) {
+    public TeamResponse execute(UUID id, TeamRequest request) {
         TeamEntity team = this.teamRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
@@ -30,6 +35,7 @@ public class UpdateTeamUseCase {
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
 
         Utils.copyNonNullProperties(request, team);
-        return this.teamRepository.save(team);
+        var updatedEntity = this.teamRepository.save(team);
+        return this.mapper.toResponse(updatedEntity);
     }
 }

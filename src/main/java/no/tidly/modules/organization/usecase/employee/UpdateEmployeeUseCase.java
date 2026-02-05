@@ -6,8 +6,9 @@ import org.springframework.stereotype.Service;
 
 import no.tidly.core.exceptions.ResourceNotFoundException;
 import no.tidly.core.shared.Utils;
-import no.tidly.modules.organization.domain.EmployeeEntity;
 import no.tidly.modules.organization.dto.EmployeeRequest;
+import no.tidly.modules.organization.dto.EmployeeResponse;
+import no.tidly.modules.organization.mapper.EmployeeMapper;
 import no.tidly.modules.organization.repository.CompanyRepository;
 import no.tidly.modules.organization.repository.EmployeeRepository;
 import no.tidly.modules.organization.repository.TeamRepository;
@@ -15,29 +16,32 @@ import no.tidly.modules.organization.repository.TeamRepository;
 @Service
 public class UpdateEmployeeUseCase {
 
-    private final EmployeeRepository employeeRepository;
-    private final CompanyRepository companyRepository;
-    private final TeamRepository teamRepository;
+        private final EmployeeRepository employeeRepository;
+        private final CompanyRepository companyRepository;
+        private final TeamRepository teamRepository;
+        private final EmployeeMapper mapper;
 
-    public UpdateEmployeeUseCase(EmployeeRepository employeeRepository,
-            CompanyRepository companyRepository,
-            TeamRepository teamRepository) {
-        this.employeeRepository = employeeRepository;
-        this.companyRepository = companyRepository;
-        this.teamRepository = teamRepository;
-    }
+        public UpdateEmployeeUseCase(EmployeeRepository employeeRepository,
+                        CompanyRepository companyRepository,
+                        TeamRepository teamRepository, EmployeeMapper mapper) {
+                this.employeeRepository = employeeRepository;
+                this.companyRepository = companyRepository;
+                this.teamRepository = teamRepository;
+                this.mapper = mapper;
+        }
 
-    public EmployeeEntity execute(UUID id, EmployeeRequest request) {
-        var employee = this.employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+        public EmployeeResponse execute(UUID id, EmployeeRequest request) {
+                var employee = this.employeeRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
-        this.teamRepository.findById(request.teamId())
-                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+                this.teamRepository.findById(request.teamId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
-        this.companyRepository.findById(request.companyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+                this.companyRepository.findById(request.companyId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
-        Utils.copyNonNullProperties(request, employee);
-        return this.employeeRepository.save(employee);
-    }
+                Utils.copyNonNullProperties(request, employee);
+                var savedEntity = this.employeeRepository.save(employee);
+                return this.mapper.toResponse(savedEntity);
+        }
 }

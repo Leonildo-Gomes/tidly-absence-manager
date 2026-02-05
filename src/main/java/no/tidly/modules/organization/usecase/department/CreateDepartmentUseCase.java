@@ -40,7 +40,7 @@ public class CreateDepartmentUseCase {
                 .company(company)
                 .parentDepartment(parentDepartment)
                 .build();
-        DepartmentEntity savedDepartment = this.departmentRepository.save(department);
-        return departmentMapper.toResponse(savedDepartment);
+        var savedEntity = this.departmentRepository.save(department);
+        return this.departmentMapper.toResponse(savedEntity);
     }
 }
