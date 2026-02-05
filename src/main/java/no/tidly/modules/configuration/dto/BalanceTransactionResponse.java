@@ -7,14 +7,15 @@ import java.util.UUID;
 import no.tidly.modules.configuration.domain.enums.TransactionType;
 
 public record BalanceTransactionResponse(
-                UUID id,
-                UUID employeeId,
-                UUID absenceTypeId,
-                Integer year,
-                BigDecimal amount,
-                TransactionType transactionType,
-                String description,
-                UUID createdBy,
-                LocalDateTime createdAt,
-                LocalDateTime updatedAt) {
+        UUID id,
+        UUID employeeId,
+        String employeeName,
+        UUID absenceTypeId,
+        Integer year,
+        BigDecimal amount,
+        TransactionType transactionType,
+        String description,
+        UUID createdBy,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt) {
 }
