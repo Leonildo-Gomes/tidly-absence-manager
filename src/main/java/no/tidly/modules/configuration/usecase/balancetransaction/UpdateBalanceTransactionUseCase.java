@@ -12,12 +12,14 @@ import no.tidly.modules.configuration.domain.BalanceTransactionEntity;
 import no.tidly.modules.configuration.dto.BalanceTransactionRequest;
 import no.tidly.modules.configuration.dto.BalanceTransactionResponse;
 import no.tidly.modules.configuration.dto.repository.BalanceTransactionRepository;
+import no.tidly.modules.configuration.mapper.BalanceTransactionMapper;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateBalanceTransactionUseCase {
 
     private final BalanceTransactionRepository repository;
+    private final BalanceTransactionMapper mapper;
 
     @Transactional
     public BalanceTransactionResponse execute(UUID id, BalanceTransactionRequest request) {
@@ -27,20 +29,6 @@ public class UpdateBalanceTransactionUseCase {
         Utils.copyNonNullProperties(request, entity);
 
         BalanceTransactionEntity updatedEntity = repository.save(entity);
-        return mapToResponse(updatedEntity);
-    }
-
-    private BalanceTransactionResponse mapToResponse(BalanceTransactionEntity entity) {
-        return new BalanceTransactionResponse(
-                entity.getId(),
-                entity.getEmployeeId(),
-                entity.getAbsenceTypeId(),
-                entity.getYear(),
-                entity.getAmount(),
-                entity.getTransactionType(),
-                entity.getDescription(),
-                entity.getCreatedBy(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt());
+        return mapper.toResponse(updatedEntity);
     }
 }
