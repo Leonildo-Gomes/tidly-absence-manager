@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import no.tidly.core.exceptions.ResourceNotFoundException;
 import no.tidly.modules.configuration.domain.AbsenceBalanceEntity;
 import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
-import no.tidly.modules.configuration.dto.repository.AbsenceBalanceRepository;
 import no.tidly.modules.configuration.mapper.AbsenceBalanceMapper;
+import no.tidly.modules.configuration.repository.AbsenceBalanceRepository;
 
 @Service
 @RequiredArgsConstructor

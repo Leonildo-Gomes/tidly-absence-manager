@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
-import no.tidly.modules.configuration.dto.repository.AbsenceBalanceRepository;
 import no.tidly.modules.configuration.mapper.AbsenceBalanceMapper;
+import no.tidly.modules.configuration.repository.AbsenceBalanceRepository;
 
 @Service
 @RequiredArgsConstructor

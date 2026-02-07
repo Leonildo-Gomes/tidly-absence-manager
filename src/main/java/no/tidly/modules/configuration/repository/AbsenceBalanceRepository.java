@@ -1,4 +1,4 @@
-package no.tidly.modules.configuration.dto.repository;
+package no.tidly.modules.configuration.repository;
 
 import java.util.List;
 import java.util.Optional;

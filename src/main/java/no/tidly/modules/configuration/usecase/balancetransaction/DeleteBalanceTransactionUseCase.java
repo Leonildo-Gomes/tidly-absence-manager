@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.core.exceptions.ResourceNotFoundException;
-import no.tidly.modules.configuration.dto.repository.BalanceTransactionRepository;
+import no.tidly.modules.configuration.repository.BalanceTransactionRepository;
 
 @Service
 @RequiredArgsConstructor

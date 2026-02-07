@@ -11,8 +11,8 @@ import no.tidly.core.shared.Utils;
 import no.tidly.modules.configuration.domain.AbsenceBalanceEntity;
 import no.tidly.modules.configuration.dto.AbsenceBalanceRequest;
 import no.tidly.modules.configuration.dto.AbsenceBalanceResponse;
-import no.tidly.modules.configuration.dto.repository.AbsenceBalanceRepository;
 import no.tidly.modules.configuration.mapper.AbsenceBalanceMapper;
+import no.tidly.modules.configuration.repository.AbsenceBalanceRepository;
 
 @Service
 @RequiredArgsConstructor

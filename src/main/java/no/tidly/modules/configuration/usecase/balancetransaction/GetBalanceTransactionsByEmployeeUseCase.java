@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import no.tidly.modules.configuration.dto.BalanceTransactionResponse;
-import no.tidly.modules.configuration.dto.repository.BalanceTransactionRepository;
 import no.tidly.modules.configuration.mapper.BalanceTransactionMapper;
+import no.tidly.modules.configuration.repository.BalanceTransactionRepository;
 
 @Service
 @RequiredArgsConstructor
