@@ -13,6 +13,7 @@ public class CompanyMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getOrgNumber(),
+                entity.getClerkOrgId(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
     }

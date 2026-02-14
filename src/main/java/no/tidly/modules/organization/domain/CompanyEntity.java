@@ -24,10 +24,12 @@ public class CompanyEntity extends BaseEntity {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(name = "org_number", length = 20, unique = true)
+    @Column(name = "org_number", length = 20, unique = true, nullable = false)
     private String orgNumber;
 
     @Column(name = "is_active", nullable = false)
     @Builder.Default
     private Boolean isActive = true;
+    @Column(name = "clerk_org_id", unique = true, nullable = false)
+    private String clerkOrgId;
 }

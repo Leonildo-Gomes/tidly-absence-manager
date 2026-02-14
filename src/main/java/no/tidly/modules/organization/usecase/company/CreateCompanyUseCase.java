@@ -34,6 +34,7 @@ public class CreateCompanyUseCase {
         var company = CompanyEntity.builder()
                 .name(request.name())
                 .orgNumber(request.organizationNumber())
+                .clerkOrgId(request.clerkOrgId())
                 .build();
         var savedEntity = this.companyRepository.save(company);
         return this.mapper.toResponse(savedEntity);

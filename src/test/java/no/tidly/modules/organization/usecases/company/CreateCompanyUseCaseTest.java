@@ -28,7 +28,7 @@ public class CreateCompanyUseCaseTest {
 
     @Test
     void should_not_to_able_to_create_company_when_name_is_null() {
-        CompanyRequest companyRequest = new CompanyRequest(null, "123456789");
+        CompanyRequest companyRequest = new CompanyRequest(null, "123456789", "123456789");
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             createCompanyUseCase.execute(companyRequest);
@@ -37,7 +37,7 @@ public class CreateCompanyUseCaseTest {
 
     @Test
     void should_not_to_able_to_create_company_when_organization_number_is_null() {
-        CompanyRequest companyRequest = new CompanyRequest("Company", null);
+        CompanyRequest companyRequest = new CompanyRequest("Company", null, "123456789");
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             createCompanyUseCase.execute(companyRequest);
@@ -46,13 +46,13 @@ public class CreateCompanyUseCaseTest {
 
     @Test
     void should_be_able_to_create_company() {
-        CompanyRequest companyRequest = new CompanyRequest("Company", "123456789");
+        CompanyRequest companyRequest = new CompanyRequest("Company", "123456789", "123456789");
         createCompanyUseCase.execute(companyRequest);
     }
 
     @Test
     void should_not_to_be_able_to_create_company_when_organization_number_exists() {
-        CompanyRequest companyRequest = new CompanyRequest("Company", "123456789");
+        CompanyRequest companyRequest = new CompanyRequest("Company", "123456789", "123456789");
         when(companyRepository.findByOrgNumber(companyRequest.organizationNumber()))
                 .thenReturn(Optional.of(new CompanyEntity()));
         Assertions.assertThrows(OrgNumberFoundException.class, () -> {
