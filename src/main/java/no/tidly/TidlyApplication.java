@@ -9,5 +9,4 @@ public class TidlyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TidlyApplication.class, args);
 	}
-
 }

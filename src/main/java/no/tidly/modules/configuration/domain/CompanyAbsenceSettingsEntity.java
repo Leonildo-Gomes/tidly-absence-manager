@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +36,7 @@ public class CompanyAbsenceSettingsEntity extends BaseEntity {
     @Column(name = "max_days_per_year", nullable = false, precision = 5, scale = 2)
     private BigDecimal maxDaysPerYear;
 
-    @Column(name = "min_notice_days", nullable = false, columnDefinition = "INT DEFAULT 0")
-    private Integer minNoticeDays;
+    @Column(name = "min_notice_days", nullable = false)
+    @Builder.Default
+    private Integer minNoticeDays = 0;
 }

@@ -41,11 +41,11 @@ public class AbsenceBalanceEntity extends BaseEntity {
     @Column(name = "total_entitled", nullable = false, precision = 5, scale = 2)
     private BigDecimal totalEntitled;
 
-    @Column(name = "used_days", columnDefinition = "DECIMAL(5,2) DEFAULT 0")
+    @Column(name = "used_days", nullable = false, precision = 5, scale = 2)
     @Builder.Default
     private BigDecimal usedDays = BigDecimal.ZERO;
 
-    @Column(name = "pending_days", columnDefinition = "DECIMAL(5,2) DEFAULT 0")
+    @Column(name = "pending_days", nullable = false, precision = 5, scale = 2)
     @Builder.Default
     private BigDecimal pendingDays = BigDecimal.ZERO;
 

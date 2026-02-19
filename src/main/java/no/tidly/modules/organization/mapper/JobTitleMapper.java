@@ -15,7 +15,7 @@ public class JobTitleMapper {
                 entity.getDescription(),
                 entity.getCompany().getId(),
                 entity.getCompany().getName(),
-                entity.isActive(),
+                entity.getIsActive(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
     }
