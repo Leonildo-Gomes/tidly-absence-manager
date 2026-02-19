@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.info.Info;
 @Configuration
 public class OpenApiConfig {
         String description = """
-                        <h1>Tidly Absence Manager API</h1>
                         <p>API for managing absences in Norway</p>
                         """;
 

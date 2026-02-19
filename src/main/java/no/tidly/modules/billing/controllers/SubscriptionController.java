@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import no.tidly.modules.billing.dto.SubscriptionRequest;
 import no.tidly.modules.billing.dto.SubscriptionResponse;
 import no.tidly.modules.billing.usecase.subscription.CreateSubscriptionUseCase;
+import no.tidly.modules.billing.usecase.subscription.GetActiveSubscriptionUseCase;
 import no.tidly.modules.billing.usecase.subscription.GetCompanySubscriptionUseCase;
 
 @RestController
@@ -27,6 +28,7 @@ public class SubscriptionController {
 
     private final CreateSubscriptionUseCase createSubscriptionUseCase;
     private final GetCompanySubscriptionUseCase getCompanySubscriptionUseCase;
+    private final GetActiveSubscriptionUseCase getActiveSubscriptionUseCase;
 
     @PostMapping
     @Operation(summary = "Create a new subscription for a company")
@@ -35,8 +37,14 @@ public class SubscriptionController {
     }
 
     @GetMapping("/company/{companyId}")
-    @Operation(summary = "Get active subscription for a company")
+    @Operation(summary = "Get subscription for a company")
     public ResponseEntity<SubscriptionResponse> getSubscription(@PathVariable UUID companyId) {
         return ResponseEntity.ok(getCompanySubscriptionUseCase.execute(companyId));
+    }
+
+    @GetMapping("/active/company/{companyId}")
+    @Operation(summary = "Get active subscription for a company")
+    public ResponseEntity<SubscriptionResponse> getActiveSubscription(@PathVariable UUID companyId) {
+        return ResponseEntity.ok(getActiveSubscriptionUseCase.execute(companyId));
     }
 }

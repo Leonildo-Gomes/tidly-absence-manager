@@ -14,6 +14,12 @@ import no.tidly.modules.billing.dto.SubscriptionResponse;
 @Component
 public class SubscriptionMapper {
 
+    private final PlanMapper planMapper;
+
+    public SubscriptionMapper(PlanMapper planMapper) {
+        this.planMapper = planMapper;
+    }
+
     public Subscription toEntity(SubscriptionRequest request, Plan plan) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime endDate = plan.getInterval() == PlanInterval.MONTHLY ? now.plusMonths(1) : now.plusYears(1);
@@ -33,7 +39,7 @@ public class SubscriptionMapper {
         return new SubscriptionResponse(
                 subscription.getId(),
                 subscription.getCompanyId(),
-                subscription.getPlan().getId(),
+                planMapper.toResponse(subscription.getPlan()),
                 subscription.getStatus(),
                 subscription.getCurrentPeriodStart(),
                 subscription.getCurrentPeriodEnd(),
