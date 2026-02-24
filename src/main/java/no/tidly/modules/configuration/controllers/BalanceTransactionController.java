@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import no.tidly.modules.configuration.dto.BalanceTransactionRequest;
@@ -28,6 +30,7 @@ import no.tidly.modules.configuration.usecase.balancetransaction.UpdateBalanceTr
 @RestController
 @RequestMapping("/api/v1/balance-transactions")
 @RequiredArgsConstructor
+@Tag(name = "Balance Transactions", description = "Balance transaction management")
 public class BalanceTransactionController {
 
     private final CreateBalanceTransactionUseCase createBalanceTransactionUseCase;
@@ -36,28 +39,33 @@ public class BalanceTransactionController {
     private final UpdateBalanceTransactionUseCase updateBalanceTransactionUseCase;
     private final DeleteBalanceTransactionUseCase deleteBalanceTransactionUseCase;
 
+    @Operation(summary = "Create a balance transaction", description = "Creates a new balance transaction for an employee's absence balance.")
     @PostMapping
     public ResponseEntity<BalanceTransactionResponse> create(@Valid @RequestBody BalanceTransactionRequest request) {
         BalanceTransactionResponse response = createBalanceTransactionUseCase.execute(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get balance transaction by ID", description = "Retrieves a balance transaction by its unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<BalanceTransactionResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(getBalanceTransactionByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Get balance transactions by employee", description = "Retrieves a list of balance transactions for a specific employee.")
     @GetMapping
     public ResponseEntity<List<BalanceTransactionResponse>> getByEmployee(@RequestParam UUID employeeId) {
         return ResponseEntity.ok(getBalanceTransactionsByEmployeeUseCase.execute(employeeId));
     }
 
+    @Operation(summary = "Update a balance transaction", description = "Updates an existing balance transaction with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<BalanceTransactionResponse> update(@PathVariable UUID id,
             @Valid @RequestBody BalanceTransactionRequest request) {
         return ResponseEntity.ok(updateBalanceTransactionUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete a balance transaction", description = "Deletes a balance transaction by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteBalanceTransactionUseCase.execute(id);

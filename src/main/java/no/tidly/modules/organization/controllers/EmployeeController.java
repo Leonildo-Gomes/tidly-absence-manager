@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import no.tidly.modules.organization.dto.EmployeeRequest;
 import no.tidly.modules.organization.dto.EmployeeResponse;
@@ -25,6 +27,7 @@ import no.tidly.modules.organization.usecase.employee.UpdateEmployeeUseCase;
 
 @RestController
 @RequestMapping("/api/v1/employees")
+@Tag(name = "Employees", description = "Employee management")
 public class EmployeeController {
 
     private final CreateEmployeeUseCase createEmployeeUseCase;
@@ -45,27 +48,32 @@ public class EmployeeController {
         this.deleteEmployeeUseCase = deleteEmployeeUseCase;
     }
 
+    @Operation(summary = "Create a new employee", description = "Creates a new employee with the provided details.")
     @PostMapping
     public ResponseEntity<EmployeeResponse> create(@Valid @RequestBody EmployeeRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.createEmployeeUseCase.execute(request));
     }
 
+    @Operation(summary = "Get employee by ID", description = "Retrieves an employee by their unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(this.getEmployeeByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Get all employees", description = "Retrieves a list of all employees.")
     @GetMapping
     public ResponseEntity<List<EmployeeResponse>> getAll() {
         return ResponseEntity.ok(this.getAllEmployeesUseCase.execute());
     }
 
+    @Operation(summary = "Update an employee", description = "Updates an existing employee with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> update(@PathVariable UUID id,
             @Valid @RequestBody EmployeeRequest request) {
         return ResponseEntity.ok(this.updateEmployeeUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete an employee", description = "Deletes an employee by their unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         this.deleteEmployeeUseCase.execute(id);

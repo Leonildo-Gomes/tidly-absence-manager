@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import no.tidly.modules.configuration.dto.AbsenceTypeRequest;
@@ -27,6 +29,7 @@ import no.tidly.modules.configuration.usecase.absencetype.UpdateAbsenceTypeUseCa
 @RestController
 @RequestMapping("/api/v1/absence-types")
 @RequiredArgsConstructor
+@Tag(name = "Absence Types", description = "Absence type management")
 public class AbsenceTypeController {
 
     private final CreateAbsenceTypeUseCase createAbsenceTypeUseCase;
@@ -35,28 +38,33 @@ public class AbsenceTypeController {
     private final UpdateAbsenceTypeUseCase updateAbsenceTypeUseCase;
     private final DeleteAbsenceTypeUseCase deleteAbsenceTypeUseCase;
 
+    @Operation(summary = "Create an absence type", description = "Creates a new absence type with the provided details.")
     @PostMapping
     public ResponseEntity<AbsenceTypeResponse> create(@Valid @RequestBody AbsenceTypeRequest request) {
         AbsenceTypeResponse response = createAbsenceTypeUseCase.execute(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get all absence types", description = "Retrieves a list of all absence types.")
     @GetMapping
     public ResponseEntity<List<AbsenceTypeResponse>> getAll() {
         return ResponseEntity.ok(getAllAbsenceTypesUseCase.execute());
     }
 
+    @Operation(summary = "Get absence type by ID", description = "Retrieves an absence type by its unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<AbsenceTypeResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(getAbsenceTypeByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Update an absence type", description = "Updates an existing absence type with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<AbsenceTypeResponse> update(@PathVariable UUID id,
             @Valid @RequestBody AbsenceTypeRequest request) {
         return ResponseEntity.ok(updateAbsenceTypeUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete an absence type", description = "Deletes an absence type by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteAbsenceTypeUseCase.execute(id);

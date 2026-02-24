@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import no.tidly.modules.organization.dto.AssignLeaderRequest;
 import no.tidly.modules.organization.dto.TeamLeaderHistoryResponse;
 import no.tidly.modules.organization.dto.TeamRequest;
@@ -30,6 +33,8 @@ import no.tidly.modules.organization.usecase.team.UpdateTeamUseCase;
 
 @RestController
 @RequestMapping("/api/v1/teams")
+@RequiredArgsConstructor
+@Tag(name = "Teams", description = "Team management")
 public class TeamController {
 
     private final CreateTeamUseCase createTeamUseCase;
@@ -40,55 +45,46 @@ public class TeamController {
     private final AssignTeamLeaderUseCase assignTeamLeaderUseCase;
     private final GetTeamLeaderHistoryUseCase getTeamLeaderHistoryUseCase;
 
-    public TeamController(CreateTeamUseCase createTeamUseCase,
-            GetTeamByIdUseCase getTeamByIdUseCase,
-            GetAllTeamsUseCase getAllTeamsUseCase,
-            UpdateTeamUseCase updateTeamUseCase,
-            DeleteTeamUseCase deleteTeamUseCase,
-            AssignTeamLeaderUseCase assignTeamLeaderUseCase,
-            GetTeamLeaderHistoryUseCase getTeamLeaderHistoryUseCase) {
-        this.createTeamUseCase = createTeamUseCase;
-        this.getTeamByIdUseCase = getTeamByIdUseCase;
-        this.getAllTeamsUseCase = getAllTeamsUseCase;
-        this.updateTeamUseCase = updateTeamUseCase;
-        this.deleteTeamUseCase = deleteTeamUseCase;
-        this.assignTeamLeaderUseCase = assignTeamLeaderUseCase;
-        this.getTeamLeaderHistoryUseCase = getTeamLeaderHistoryUseCase;
-    }
-
+    @Operation(summary = "Create a new team", description = "Creates a new team with the provided details.")
     @PostMapping
     public ResponseEntity<TeamResponse> create(@Valid @RequestBody TeamRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.createTeamUseCase.execute(request));
     }
 
+    @Operation(summary = "Get team by ID", description = "Retrieves a team by its unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<TeamResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(this.getTeamByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Get all teams", description = "Retrieves a list of all teams.")
     @GetMapping
     public ResponseEntity<List<TeamResponse>> getAll() {
         return ResponseEntity.ok(this.getAllTeamsUseCase.execute());
     }
 
+    @Operation(summary = "Update a team", description = "Updates an existing team with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<TeamResponse> update(@PathVariable UUID id,
             @Valid @RequestBody TeamRequest request) {
         return ResponseEntity.ok(this.updateTeamUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete a team", description = "Deletes a team by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         this.deleteTeamUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Assign a team leader", description = "Assigns a new leader to the team.")
     @PatchMapping("/{id}/leader")
     public ResponseEntity<Void> assignLeader(@PathVariable UUID id, @Valid @RequestBody AssignLeaderRequest request) {
         this.assignTeamLeaderUseCase.execute(id, request.leaderId());
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get team leader history", description = "Retrieves the history of leaders for a specific team.")
     @GetMapping("/{id}/history")
     public ResponseEntity<List<TeamLeaderHistoryResponse>> getHistory(@PathVariable UUID id) {
         var history = this.getTeamLeaderHistoryUseCase.execute(id);

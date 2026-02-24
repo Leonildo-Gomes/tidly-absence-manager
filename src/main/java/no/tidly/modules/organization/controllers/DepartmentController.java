@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import no.tidly.modules.organization.dto.AssignManagerRequest;
 import no.tidly.modules.organization.dto.DepartmentManagerHistoryResponse;
@@ -31,6 +33,7 @@ import no.tidly.modules.organization.usecase.department.UpdateDepartmentUseCase;
 
 @RestController
 @RequestMapping("/api/v1/departments")
+@Tag(name = "Departments", description = "Department management")
 public class DepartmentController {
 
     private final CreateDepartmentUseCase createDepartmentUseCase;
@@ -58,39 +61,46 @@ public class DepartmentController {
         this.getDepartmentManagerHistoryUseCase = getDepartmentManagerHistoryUseCase;
     }
 
+    @Operation(summary = "Create a new department", description = "Creates a new department with the provided details.")
     @PostMapping
     public ResponseEntity<DepartmentResponse> create(@Valid @RequestBody DepartmentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.createDepartmentUseCase.execute(request));
     }
 
+    @Operation(summary = "Get department by ID", description = "Retrieves a department by its unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(this.getDepartmentByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Get all departments", description = "Retrieves a list of all departments.")
     @GetMapping
     public ResponseEntity<List<DepartmentResponse>> getAll() {
         return ResponseEntity.ok(this.getAllDepartmentsUseCase.execute());
     }
 
+    @Operation(summary = "Update a department", description = "Updates an existing department with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponse> update(@PathVariable UUID id,
             @Valid @RequestBody DepartmentRequest request) {
         return ResponseEntity.ok(this.updateDepartmentUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete a department", description = "Deletes a department by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         this.deleteDepartmentUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Assign a department manager", description = "Assigns a new manager to the department.")
     @PatchMapping("/{id}/manager")
     public ResponseEntity<Void> assignManager(@PathVariable UUID id, @Valid @RequestBody AssignManagerRequest request) {
         this.assignDepartmentManagerUseCase.execute(id, request.managerId());
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get department manager history", description = "Retrieves the history of managers for a specific department.")
     @GetMapping("/{id}/history")
     public ResponseEntity<List<DepartmentManagerHistoryResponse>> getHistory(@PathVariable UUID id) {
         var history = this.getDepartmentManagerHistoryUseCase.execute(id);

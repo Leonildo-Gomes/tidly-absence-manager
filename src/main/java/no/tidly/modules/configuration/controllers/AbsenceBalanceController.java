@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import no.tidly.modules.configuration.dto.AbsenceBalanceRequest;
@@ -28,6 +30,7 @@ import no.tidly.modules.configuration.usecase.absencebalance.UpdateAbsenceBalanc
 @RestController
 @RequestMapping("/api/v1/absence-balances")
 @RequiredArgsConstructor
+@Tag(name = "Absence Balances", description = "Absence balance management")
 public class AbsenceBalanceController {
 
     private final CreateAbsenceBalanceUseCase createAbsenceBalanceUseCase;
@@ -36,28 +39,33 @@ public class AbsenceBalanceController {
     private final UpdateAbsenceBalanceUseCase updateAbsenceBalanceUseCase;
     private final DeleteAbsenceBalanceUseCase deleteAbsenceBalanceUseCase;
 
+    @Operation(summary = "Create an absence balance", description = "Creates a new absence balance for an employee.")
     @PostMapping
     public ResponseEntity<AbsenceBalanceResponse> create(@Valid @RequestBody AbsenceBalanceRequest request) {
         AbsenceBalanceResponse response = createAbsenceBalanceUseCase.execute(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get absence balance by ID", description = "Retrieves an absence balance by its unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<AbsenceBalanceResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(getAbsenceBalanceByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Get absence balances by employee", description = "Retrieves a list of absence balances for a specific employee.")
     @GetMapping
     public ResponseEntity<List<AbsenceBalanceResponse>> getByEmployee(@RequestParam UUID employeeId) {
         return ResponseEntity.ok(getAbsenceBalancesByEmployeeUseCase.execute(employeeId));
     }
 
+    @Operation(summary = "Update an absence balance", description = "Updates an existing absence balance with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<AbsenceBalanceResponse> update(@PathVariable UUID id,
             @Valid @RequestBody AbsenceBalanceRequest request) {
         return ResponseEntity.ok(updateAbsenceBalanceUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete an absence balance", description = "Deletes an absence balance by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteAbsenceBalanceUseCase.execute(id);

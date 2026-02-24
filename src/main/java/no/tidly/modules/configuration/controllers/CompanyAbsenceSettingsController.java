@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import no.tidly.modules.configuration.dto.CompanyAbsenceSettingsRequest;
@@ -28,6 +30,7 @@ import no.tidly.modules.configuration.usecase.companyabsencesettings.UpdateCompa
 @RestController
 @RequestMapping("/api/v1/company-absence-settings")
 @RequiredArgsConstructor
+@Tag(name = "Company Absence Settings", description = "Company absence settings management")
 public class CompanyAbsenceSettingsController {
 
     private final CreateCompanyAbsenceSettingsUseCase createCompanyAbsenceSettingsUseCase;
@@ -36,6 +39,7 @@ public class CompanyAbsenceSettingsController {
     private final UpdateCompanyAbsenceSettingsUseCase updateCompanyAbsenceSettingsUseCase;
     private final DeleteCompanyAbsenceSettingsUseCase deleteCompanyAbsenceSettingsUseCase;
 
+    @Operation(summary = "Create company absence settings", description = "Creates new absence settings for a company.")
     @PostMapping
     public ResponseEntity<CompanyAbsenceSettingsResponse> create(
             @Valid @RequestBody CompanyAbsenceSettingsRequest request) {
@@ -43,22 +47,26 @@ public class CompanyAbsenceSettingsController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get company absence settings by ID", description = "Retrieves company absence settings by its unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<CompanyAbsenceSettingsResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(getCompanyAbsenceSettingsByIdUseCase.execute(id));
     }
 
+    @Operation(summary = "Get company absence settings by company ID", description = "Retrieves a list of absence settings for a specific company.")
     @GetMapping
     public ResponseEntity<List<CompanyAbsenceSettingsResponse>> getByCompany(@RequestParam UUID companyId) {
         return ResponseEntity.ok(getCompanyAbsenceSettingsByCompanyUseCase.execute(companyId));
     }
 
+    @Operation(summary = "Update company absence settings", description = "Updates existing company absence settings with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<CompanyAbsenceSettingsResponse> update(@PathVariable UUID id,
             @Valid @RequestBody CompanyAbsenceSettingsRequest request) {
         return ResponseEntity.ok(updateCompanyAbsenceSettingsUseCase.execute(id, request));
     }
 
+    @Operation(summary = "Delete company absence settings", description = "Deletes company absence settings by its unique identifier.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteCompanyAbsenceSettingsUseCase.execute(id);
