@@ -8,6 +8,7 @@ public record CompanyResponse(
                 String name,
                 String organizationNumber,
                 String clerkOrgId,
+                Boolean isActive,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt) {
 }
