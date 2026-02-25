@@ -21,6 +21,7 @@ public class CreateCompanyUseCase {
     }
 
     public CompanyResponse execute(CompanyRequest request) {
+        System.out.println(" Criando company:" + request);
         this.companyRepository.findByOrgNumber(request.organizationNumber())
                 .ifPresent(company -> {
                     throw new OrgNumberFoundException(request.organizationNumber());
@@ -31,12 +32,14 @@ public class CreateCompanyUseCase {
         if (request.organizationNumber() == null) {
             throw new IllegalArgumentException("Organization number cannot be null");
         }
+
         var company = CompanyEntity.builder()
                 .name(request.name())
                 .orgNumber(request.organizationNumber())
                 .clerkOrgId(request.clerkOrgId())
                 .build();
         var savedEntity = this.companyRepository.save(company);
+        System.out.println("Company created:" + savedEntity);
         return this.mapper.toResponse(savedEntity);
     }
 }
