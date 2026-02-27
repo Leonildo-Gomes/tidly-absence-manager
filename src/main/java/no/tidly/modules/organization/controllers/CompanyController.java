@@ -19,11 +19,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import no.tidly.modules.organization.dto.CompanyRequest;
 import no.tidly.modules.organization.dto.CompanyResponse;
+import no.tidly.modules.organization.dto.UpdateCompanyRequest;
 import no.tidly.modules.organization.usecase.company.CreateCompanyUseCase;
 import no.tidly.modules.organization.usecase.company.DeleteCompanyUseCase;
 import no.tidly.modules.organization.usecase.company.GetAllCompaniesUseCase;
 import no.tidly.modules.organization.usecase.company.GetCompanyByIdUseCase;
 import no.tidly.modules.organization.usecase.company.UpdateCompanyUseCase;
+
 
 @RestController
 @RequestMapping("/api/v1/companies")
@@ -69,7 +71,7 @@ public class CompanyController {
     @Operation(summary = "Update a company", description = "Updates an existing company with the provided details.")
     @PutMapping("/{id}")
     public ResponseEntity<CompanyResponse> update(@PathVariable UUID id,
-            @Valid @RequestBody CompanyRequest request) {
+            @Valid @RequestBody UpdateCompanyRequest request) {
         return ResponseEntity.ok(this.updateCompanyUseCase.execute(id, request));
     }
 

@@ -8,8 +8,8 @@ import no.tidly.core.exceptions.ForbiddenAccessException;
 import no.tidly.core.exceptions.ResourceNotFoundException;
 import no.tidly.core.security.SecurityContextService;
 import no.tidly.core.shared.Utils;
-import no.tidly.modules.organization.dto.CompanyRequest;
 import no.tidly.modules.organization.dto.CompanyResponse;
+import no.tidly.modules.organization.dto.UpdateCompanyRequest;
 import no.tidly.modules.organization.mapper.CompanyMapper;
 import no.tidly.modules.organization.repository.CompanyRepository;
 
@@ -27,7 +27,7 @@ public class UpdateCompanyUseCase {
         this.securityContextService = securityContextService;
     }
 
-    public CompanyResponse execute(UUID id, CompanyRequest request) {
+    public CompanyResponse execute(UUID id, UpdateCompanyRequest request) {
         String activeClerkOrgId = securityContextService.getCurrentOrganizationId();
 
         var company = this.companyRepository.findById(id)
@@ -36,6 +36,7 @@ public class UpdateCompanyUseCase {
         if (activeClerkOrgId == null || !activeClerkOrgId.equals(company.getClerkOrgId())) {
             throw new ForbiddenAccessException("O utilizador não tem permissão para atualizar esta empresa.");
         }
+        System.out.println("request:"+request);
 
         Utils.copyNonNullProperties(request, company);
         var updatedEntity = this.companyRepository.save(company);

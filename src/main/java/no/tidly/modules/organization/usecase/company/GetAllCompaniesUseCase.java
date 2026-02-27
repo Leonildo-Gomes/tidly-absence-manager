@@ -25,7 +25,9 @@ public class GetAllCompaniesUseCase {
 
     public List<CompanyResponse> execute() {
         String activeClerkOrgId = securityContextService.getCurrentOrganizationId();
-        System.out.println(activeClerkOrgId);
+        String currentUserId = securityContextService.getCurrentUserId();
+        System.out.println("activeClerkOrgId:"+activeClerkOrgId);
+        System.out.println("currentUserId:"+currentUserId);
 
         if (activeClerkOrgId == null) {
             return List.of();
