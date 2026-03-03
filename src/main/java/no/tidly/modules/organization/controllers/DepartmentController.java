@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -73,9 +74,10 @@ public class DepartmentController {
         return ResponseEntity.ok(this.getDepartmentByIdUseCase.execute(id));
     }
 
-    @Operation(summary = "Get all departments", description = "Retrieves a list of all departments.")
+    @Operation(summary = "Get all departments by company ID", description = "Retrieves a list of all departments for a specific company.")
     @GetMapping
-    public ResponseEntity<List<DepartmentResponse>> getAll() {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<DepartmentResponse>> getAllByCompanyId() {
         return ResponseEntity.ok(this.getAllDepartmentsUseCase.execute());
     }
 

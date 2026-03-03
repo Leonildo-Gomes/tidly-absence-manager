@@ -14,22 +14,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfigurations {
 
-    public SecurityConfigurations() {
-    }
+        public SecurityConfigurations() {
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        return httpSecurity
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers(POST, "/api/v1/companies").permitAll()
-                        .requestMatchers("/api/v1/companies/**").authenticated()
-                        .anyRequest().permitAll())
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(org.springframework.security.config.Customizer.withDefaults()))
-                .build();
-    }
+                return httpSecurity
+                                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
+                                                                "/swagger-ui.html")
+                                                .permitAll()
+                                                .requestMatchers(POST, "/api/v1/companies").permitAll()
+                                                .requestMatchers("/api/v1/companies/**").authenticated()
+                                                .requestMatchers("/api/v1/departments/**").authenticated()
+                                                .anyRequest().permitAll())
+                                .oauth2ResourceServer(
+                                                oauth2 -> oauth2.jwt(org.springframework.security.config.Customizer
+                                                                .withDefaults()))
+                                .build();
+        }
 
 }

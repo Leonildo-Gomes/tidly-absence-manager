@@ -16,6 +16,7 @@ public class DepartmentMapper {
                 entity.getCompany().getName(),
                 entity.getParentDepartment() != null ? entity.getParentDepartment().getId() : null,
                 entity.getParentDepartment() != null ? entity.getParentDepartment().getName() : null,
+                entity.getIsActive(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
     }

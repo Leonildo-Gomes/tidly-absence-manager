@@ -11,5 +11,7 @@ import no.tidly.modules.organization.domain.CompanyEntity;
 public interface CompanyRepository extends JpaRepository<CompanyEntity, UUID> {
     Optional<CompanyEntity> findByOrgNumber(String orgNumber);
 
+    Optional<CompanyEntity> findByClerkOrgId(String clerkOrgId);
+
     List<CompanyEntity> findAllByClerkOrgId(String clerkOrgId);
 }

@@ -80,5 +80,6 @@ public class CreateDepartmentUseCaseTest {
         Assertions.assertEquals(result.code(), departmentRequest.code());
         // Assertions.assertEquals(result.companyId(), departmentRequest.companyId());
         Assertions.assertNull(result.parentDepartmentId());
+
     }
 }
