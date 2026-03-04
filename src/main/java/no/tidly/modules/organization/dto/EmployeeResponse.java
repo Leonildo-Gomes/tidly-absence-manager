@@ -7,17 +7,19 @@ import java.util.UUID;
 import no.tidly.modules.organization.domain.enums.Gender;
 
 public record EmployeeResponse(
-                UUID id,
-                String userId,
-                String name,
-                String email,
-                String phone,
-                Gender gender,
-                LocalDate startDate,
-                LocalDate endDate,
-                Boolean isActive,
-                UUID companyId,
-                UUID teamId,
-                LocalDateTime createdAt,
-                LocalDateTime updatedAt) {
+        UUID id,
+        String userId,
+        String name,
+        String email,
+        String phone,
+        Gender gender,
+        LocalDate startDate,
+        LocalDate endDate,
+        Boolean isActive,
+        UUID companyId,
+        String companyName,
+        UUID teamId,
+        String teamName,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt) {
 }

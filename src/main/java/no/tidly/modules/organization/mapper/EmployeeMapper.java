@@ -20,7 +20,9 @@ public class EmployeeMapper {
                 entity.getEndDate(),
                 entity.getIsActive(),
                 entity.getCompany() != null ? entity.getCompany().getId() : null,
+                entity.getCompany() != null ? entity.getCompany().getName() : null,
                 entity.getTeam() != null ? entity.getTeam().getId() : null,
+                entity.getTeam() != null ? entity.getTeam().getName() : null,
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
     }
