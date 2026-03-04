@@ -23,6 +23,7 @@ import no.tidly.modules.organization.dto.AssignManagerRequest;
 import no.tidly.modules.organization.dto.DepartmentManagerHistoryResponse;
 import no.tidly.modules.organization.dto.DepartmentRequest;
 import no.tidly.modules.organization.dto.DepartmentResponse;
+import no.tidly.modules.organization.dto.TeamResponse;
 import no.tidly.modules.organization.mapper.DepartmentMapper;
 import no.tidly.modules.organization.usecase.department.AssignDepartmentManagerUseCase;
 import no.tidly.modules.organization.usecase.department.CreateDepartmentUseCase;
@@ -31,6 +32,7 @@ import no.tidly.modules.organization.usecase.department.GetAllDepartmentsUseCase
 import no.tidly.modules.organization.usecase.department.GetDepartmentByIdUseCase;
 import no.tidly.modules.organization.usecase.department.GetDepartmentManagerHistoryUseCase;
 import no.tidly.modules.organization.usecase.department.UpdateDepartmentUseCase;
+import no.tidly.modules.organization.usecase.team.GetTeamsByDepartmentIdUseCase;
 
 @RestController
 @RequestMapping("/api/v1/departments")
@@ -44,6 +46,7 @@ public class DepartmentController {
     private final DeleteDepartmentUseCase deleteDepartmentUseCase;
     private final AssignDepartmentManagerUseCase assignDepartmentManagerUseCase;
     private final GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase;
+    private final GetTeamsByDepartmentIdUseCase getTeamsByDepartmentIdUseCase;
 
     public DepartmentController(CreateDepartmentUseCase createDepartmentUseCase,
             GetDepartmentByIdUseCase getDepartmentByIdUseCase,
@@ -52,6 +55,7 @@ public class DepartmentController {
             DeleteDepartmentUseCase deleteDepartmentUseCase,
             AssignDepartmentManagerUseCase assignDepartmentManagerUseCase,
             GetDepartmentManagerHistoryUseCase getDepartmentManagerHistoryUseCase,
+            GetTeamsByDepartmentIdUseCase getTeamsByDepartmentIdUseCase,
             DepartmentMapper mapper) {
         this.createDepartmentUseCase = createDepartmentUseCase;
         this.getDepartmentByIdUseCase = getDepartmentByIdUseCase;
@@ -60,6 +64,7 @@ public class DepartmentController {
         this.deleteDepartmentUseCase = deleteDepartmentUseCase;
         this.assignDepartmentManagerUseCase = assignDepartmentManagerUseCase;
         this.getDepartmentManagerHistoryUseCase = getDepartmentManagerHistoryUseCase;
+        this.getTeamsByDepartmentIdUseCase = getTeamsByDepartmentIdUseCase;
     }
 
     @Operation(summary = "Create a new department", description = "Creates a new department with the provided details.")
@@ -117,5 +122,11 @@ public class DepartmentController {
                         h.getEndDate()))
                 .toList();
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Get all teams by department ID", description = "Retrieves a list of all teams belonging to a specific department.")
+    @GetMapping("/{id}/teams")
+    public ResponseEntity<List<TeamResponse>> getTeamsByDepartmentId(@PathVariable UUID id) {
+        return ResponseEntity.ok(this.getTeamsByDepartmentIdUseCase.execute(id));
     }
 }

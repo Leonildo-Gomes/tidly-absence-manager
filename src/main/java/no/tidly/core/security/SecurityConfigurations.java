@@ -29,6 +29,7 @@ public class SecurityConfigurations {
                                                 .requestMatchers(POST, "/api/v1/companies").permitAll()
                                                 .requestMatchers("/api/v1/companies/**").authenticated()
                                                 .requestMatchers("/api/v1/departments/**").authenticated()
+                                                .requestMatchers("/api/v1/teams/**").authenticated()
                                                 .anyRequest().permitAll())
                                 .oauth2ResourceServer(
                                                 oauth2 -> oauth2.jwt(org.springframework.security.config.Customizer

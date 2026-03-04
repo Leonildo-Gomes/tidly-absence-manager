@@ -13,6 +13,7 @@ public class TeamMapper {
                 team.getName(),
                 team.getCode(),
                 team.getDepartment().getId(),
-                team.getDepartment().getName());
+                team.getDepartment().getName(),
+                team.getIsActive());
     }
 }
