@@ -26,10 +26,6 @@ public class AbsenceTypeEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "is_paid", nullable = false)
-    @Builder.Default
-    private Boolean isPaid = true;
-
     @Column(name = "requires_attachment", nullable = false)
     @Builder.Default
     private Boolean requiresAttachment = false;

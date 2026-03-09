@@ -16,7 +16,6 @@ public class AbsenceTypeMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                entity.getIsPaid(),
                 entity.getRequiresAttachment(),
                 entity.getCode(),
                 entity.getIsActive(),

@@ -22,7 +22,6 @@ public class CreateAbsenceTypeUseCase {
         AbsenceTypeEntity entity = AbsenceTypeEntity.builder()
                 .name(request.name())
                 .description(request.description())
-                .isPaid(request.isPaid())
                 .requiresAttachment(request.requiresAttachment())
                 .code(request.code())
                 .isActive(request.isActive())

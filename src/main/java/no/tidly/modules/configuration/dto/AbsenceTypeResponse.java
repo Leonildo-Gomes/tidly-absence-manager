@@ -4,13 +4,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record AbsenceTypeResponse(
-        UUID id,
-        String name,
-        String description,
-        Boolean isPaid,
-        Boolean requiresAttachment,
-        String code,
-        Boolean isActive,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+                UUID id,
+                String name,
+                String description,
+                Boolean requiresAttachment,
+                String code,
+                Boolean isActive,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt) {
 }
