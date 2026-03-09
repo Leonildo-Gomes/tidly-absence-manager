@@ -36,4 +36,8 @@ public class AbsenceTypeEntity extends BaseEntity {
     @Column(name = "is_active", nullable = false)
     @Builder.Default
     private Boolean isActive = true;
+
+    @Column(name = "color", nullable = false)
+    @Builder.Default
+    private String color = "#3b82f6";
 }

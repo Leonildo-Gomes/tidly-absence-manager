@@ -9,6 +9,7 @@ public record AbsenceTypeResponse(
                 String description,
                 Boolean requiresAttachment,
                 String code,
+                String color,
                 Boolean isActive,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt) {

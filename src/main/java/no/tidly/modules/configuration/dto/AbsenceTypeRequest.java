@@ -9,5 +9,6 @@ public record AbsenceTypeRequest(
         String description,
         @NotNull(message = "requiresAttachment is required") Boolean requiresAttachment,
         @Size(max = 50, message = "Code must be less than 50 characters") String code,
+        @NotNull(message = "color is required") @Size(max = 10, message = "Color must be less than 10 characters") String color,
         @NotNull(message = "isActive is required") Boolean isActive) {
 }

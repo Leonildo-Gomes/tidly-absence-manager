@@ -24,6 +24,7 @@ public class CreateAbsenceTypeUseCase {
                 .description(request.description())
                 .requiresAttachment(request.requiresAttachment())
                 .code(request.code())
+                .color(request.color())
                 .isActive(request.isActive())
                 .build();
         AbsenceTypeEntity savedEntity = absenceTypeRepository.save(entity);
